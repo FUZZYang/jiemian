@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>课程管理</title>
+  <link rel="stylesheet" href="css/courseManage.css">
+  <style>
+    .tool-bar {
+        width: 200px;
+        height: 100%;
+        background-color: #f0f0f0;
+        float: left;
+      }
+      .tool-bar ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .tool-bar li {
+        padding: 10px;
+        cursor: pointer;
+      }
+      .tool-bar li:hover {
+        background-color: #e0e0e0;
+      }
+      /* 右侧查询栏和表格样式 */
+      .main {
+        margin-left: 200px;
+        padding: 20px;
+      }
+      .search-bar {
+        margin-bottom: 20px;
+      }
+      .search-bar input[type="text"] {
+        width: 200px;
+        padding: 5px;
+        margin-right: 10px;
+      }
+      .search-bar select {
+        padding: 5px;
+        margin-right: 10px;
+      }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table th, .table td {
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
+      .table th {
+        background-color: #f0f0f0;
+        font-weight: bold;
+      }
+      .table td {
+        text-align: center;
+      }
+      .pagination {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .pagination a {
+        display: inline-block;
+        padding: 5px 10px;
+        margin-right: 5px;
+        border: 1px solid #ccc;
+        text-decoration: none;
+        color: #333;
+      }
+      .pagination a.active {
+        background-color: #f0f0f0;
+      }
+  </style>
+</head>
+<body>
+  <!-- 左侧侧边导航栏 -->
+  <div class="tool-bar">
+    <ul>
+      <li>课程管理</li>
+      <li>学生管理</li>
+      <li>教师管理</li>
+    </ul>
+  </div>
+  <!-- 右侧查询栏和表格 -->
+  <div class="main">
+    <div class="search-bar">
+      <input type="text" placeholder="请输入课程名称">
+      <select>
+        <option value="">全部类别</option>
+        <option value="1">计算机科学</option>
+        <option value="2">数学</option>
+        <option value="3">物理</option>
+      </select>
+      <select>
+        <option value="">全部状态</option>
+        <option value="1">已发布</option>
+        <option value="2">未发布</option>
+      </select>
+      <button>查询</button>
+    </div>
+  <div>
+    <button>新增</button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>课程名称</th>
+          <th>类别</th>
+          <th>状态</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 这里使用 ajax 技术动态加载数据 -->
+      </tbody>
+    </table>
+    <div class="pagination">
+      <a href="#" class="active">1</a>
+      <a href="#">2</a>
+      <a href="#">3</a>
+      <a href="#">4</a>
+      <a href="#">5</a>
+    </div>
+    </div>
+  </div>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script>
+    $(function() {
+      // 查询按钮点击事件
+      $("button").click(function() {
+        // 获取查询条件
+        var name = $("input[type='text']").val();
+        var category = $("select:eq(0)").val();
+        var status = $("select:eq(1)").val();
+        // 发送 ajax 请求获取数据
+        $.ajax({
+          url: "data.php",
+          type: "GET",
+          data: {
+            name: name,
+            category: category,
+            status: status
+          },
+          dataType: "json",
+          success: function(data) {
+            // 清空表格数据
+            $("tbody").empty();
+            // 遍历数据并添加到表格中
+            $.each(data, function(index, item) {
+              var tr = $("<tr></tr>");
+              var td1 = $("<td></td>").text(item.name);
+              var td2 = $("<td></td>").text(item.category);
+              var td3 = $("<td></td>").text(item.status);
+              tr.append(td1, td2, td3);
+              $("tbody").append(tr);
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
